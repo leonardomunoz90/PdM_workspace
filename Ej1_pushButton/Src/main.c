@@ -58,48 +58,19 @@ int main(void) {
 	/* Configure the system clock to 180 MHz */
 	SystemClock_Config();
 
-	/* Initialize BSP Led for LED ARRAY */
-	Led_TypeDef LED_ARRAY[LEDn] = { LED_GREEN, LED_BLUE, LED_RED };
-	for (int i = 0; i < LEDn; i++)
-		BSP_LED_Init(LED_ARRAY[i]);
-
+	/* Initialize BSP Led for LED1 */
+	BSP_LED_Init(LED1);
 	/* Initialize BSP PB for BUTTON_USER */
 	BSP_PB_Init(BUTTON_USER, BUTTON_MODE_GPIO);
 
-	/* Internal loop variables*/
-	uint8_t reverse = 0;
-	uint8_t pressed = 0;
-	uint8_t ButtonState = 0;
-	uint8_t currentLED = 0;
-
 	/* Infinite loop */
 	while (1) {
-		BSP_LED_On(LED_ARRAY[currentLED]);
-		HAL_Delay(200);
-		BSP_LED_On(LED_ARRAY[currentLED]);
-		HAL_Delay(200);
+		if (BSP_PB_GetState(BUTTON_USER)) {
+			BSP_LED_On(LED1);
+			HAL_Delay(100);
+			BSP_LED_Off(LED1);
+			HAL_Delay(100);
 
-		/* Read button function */
-		ButtonState = BSP_PB_GetState(BUTTON_USER);
-		if (ButtonState && !pressed) {
-			reverse = !reverse;
-			pressed = 1;
-		}
-		if (!ButtonState && pressed) {
-			pressed = 0;
-		}
-
-		/*Modifies LED index*/
-		if (reverse) {
-			if (currentLED == 0)
-				currentLED = 2;
-			else
-				currentLED--;
-		} else {
-			if (currentLED == 2)
-				currentLED = 0;
-			else
-				currentLED++;
 		}
 	}
 }
