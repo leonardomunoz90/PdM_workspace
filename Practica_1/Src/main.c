@@ -82,7 +82,7 @@ int main(void) {
 	while (1) {
 		BSP_LED_On(LED_ARRAY[currentLED]);
 		HAL_Delay(200);
-		BSP_LED_On(LED_ARRAY[currentLED]);
+		BSP_LED_Off(LED_ARRAY[currentLED]);
 		HAL_Delay(200);
 
 		/* Read button function */
