@@ -98,11 +98,11 @@ int main(void) {
 		/*Modifies LED index*/
 		if (reverse) {
 			if (currentLED == 0)
-				currentLED = 2;
+				currentLED = (LEDn-1);
 			else
 				currentLED--;
 		} else {
-			if (currentLED == 2)
+			if (currentLED == (LEDn-1))
 				currentLED = 0;
 			else
 				currentLED++;
