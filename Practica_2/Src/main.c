@@ -85,10 +85,10 @@ int main(void) {
 		if (delayRead(&delayLED[currentLED])) {
 			BSP_LED_Toggle(LED_ARRAY[currentLED]);
 		}
-		if (currentLED >= 2)
+		currentLED++;
+
+		if (currentLED >= LEDn)
 			currentLED = 0;
-		else
-			currentLED++;
 	}
 }
 
