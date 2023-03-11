@@ -67,7 +67,7 @@ int main(void) {
 	/* Configure the system clock to 180 MHz */
 	SystemClock_Config();
 
-	uint16_t countLED[LEDn] = { 100, 500, 1000 };
+	uint16_t countLED[LEDn] = { COUNT_LED1, COUNT_LED2, COUNT_LED3 };
 	delay_t delayLED[LEDn];
 
 	uint8_t currentLED = 0;
