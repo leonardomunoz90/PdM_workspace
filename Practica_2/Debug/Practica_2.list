@@ -3436,7 +3436,7 @@ int main(void) {
 	SystemClock_Config();
  80016a2:	f000 f85d 	bl	8001760 <SystemClock_Config>
 
-	uint16_t countLED[LEDn] = { 100, 500, 1000 };
+	uint16_t countLED[LEDn] = { COUNT_LED1, COUNT_LED2, COUNT_LED3 };
  80016a6:	4a2c      	ldr	r2, [pc, #176]	; (8001758 <main+0xc0>)
  80016a8:	f107 0328 	add.w	r3, r7, #40	; 0x28
  80016ac:	e892 0003 	ldmia.w	r2, {r0, r1}
@@ -3519,21 +3519,21 @@ int main(void) {
  8001736:	4618      	mov	r0, r3
  8001738:	f7fe ff44 	bl	80005c4 <BSP_LED_Toggle>
 		}
-		if (currentLED >= 2)
+		currentLED++;
  800173c:	f897 3037 	ldrb.w	r3, [r7, #55]	; 0x37
- 8001740:	2b01      	cmp	r3, #1
- 8001742:	d903      	bls.n	800174c <main+0xb4>
+ 8001740:	3301      	adds	r3, #1
+ 8001742:	f887 3037 	strb.w	r3, [r7, #55]	; 0x37
+
+		if (currentLED >= LEDn)
+ 8001746:	f897 3037 	ldrb.w	r3, [r7, #55]	; 0x37
+ 800174a:	2b02      	cmp	r3, #2
+ 800174c:	d9df      	bls.n	800170e <main+0x76>
 			currentLED = 0;
- 8001744:	2300      	movs	r3, #0
- 8001746:	f887 3037 	strb.w	r3, [r7, #55]	; 0x37
- 800174a:	e7e0      	b.n	800170e <main+0x76>
-		else
-			currentLED++;
- 800174c:	f897 3037 	ldrb.w	r3, [r7, #55]	; 0x37
- 8001750:	3301      	adds	r3, #1
- 8001752:	f887 3037 	strb.w	r3, [r7, #55]	; 0x37
+ 800174e:	2300      	movs	r3, #0
+ 8001750:	f887 3037 	strb.w	r3, [r7, #55]	; 0x37
 		if (delayRead(&delayLED[currentLED])) {
- 8001756:	e7da      	b.n	800170e <main+0x76>
+ 8001754:	e7db      	b.n	800170e <main+0x76>
+ 8001756:	bf00      	nop
  8001758:	08001958 	.word	0x08001958
  800175c:	08001960 	.word	0x08001960
 
