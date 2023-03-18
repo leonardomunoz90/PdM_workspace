@@ -20,7 +20,7 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-#include "API_delay.h"
+#include "API_delay.h"		//Typedef y funciones de delay no bloqueante
 
 /** @addtogroup STM32F4xx_HAL_Examples
  * @{
@@ -33,7 +33,7 @@
 /* Private typedef -----------------------------------------------------------*/
 /* Private define ------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
-#define LED_PERIOD 200
+#define LED_PERIOD 200	//Tiempo de encendido y apagado en ms
 /* Private variables ---------------------------------------------------------*/
 /* UART handler declaration */
 UART_HandleTypeDef UartHandle;
@@ -67,10 +67,9 @@ int main(void) {
 	SystemClock_Config();
 
 	/* Internal loop variables*/
-	uint8_t currentLED = 0;
-	delay_t delayLED;
-	uint8_t encendido = 0;
-	//delayLED = NULL; corregir
+	uint8_t currentLED = 0;	//Indice para interactuar con el arreglo de LEDs
+	delay_t delayLED;		//Estructura de retardo no bloqueante
+	uint8_t encendido = 0;	//Indica si en el próximo ciclo debe encenderse o apagarse el LED
 
 	/* Initialize BSP Led for LED ARRAY */
 	Led_TypeDef LED_ARRAY[LEDn] = { LED_GREEN, LED_BLUE, LED_RED };
@@ -81,7 +80,7 @@ int main(void) {
 
 	/* Infinite loop */
 	while (1) {
-		if (delayRead(&delayLED)) {
+		if (delayRead(&delayLED)) {		//Acciones al cumplir el periodo de interrupción
 			if (!encendido) {
 				BSP_LED_On(LED_ARRAY[currentLED]);
 				encendido = true;
@@ -89,7 +88,7 @@ int main(void) {
 				BSP_LED_Off(LED_ARRAY[currentLED]);
 				currentLED++;
 				encendido = false;
-				if (currentLED >= LEDn)
+				if (currentLED >= LEDn)	//Evita que por algun motivo valga más de 3
 					currentLED = 0;
 			}
 		}
