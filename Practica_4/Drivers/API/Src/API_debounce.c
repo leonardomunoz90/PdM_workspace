@@ -14,34 +14,34 @@ void debounceFSM_init() {
 	debounce = BUTTON_UP;
 	BSP_PB_Init(BUTTON_USER, BUTTON_MODE_GPIO);
 	BSP_LED_Init(LED_RED);
+	BSP_LED_Init(LED_GREEN);
 }
 
 void debounceFSM_update() {
 	switch (debounce) {
 	case BUTTON_UP:
-		if (!BSP_PB_GetState(BUTTON_USER)) {
+		if (BSP_PB_GetState(BUTTON_USER)) {
 			debounce = BUTTON_FALLING;
 		}
 		break;
 	case BUTTON_FALLING:
-		if (!BSP_PB_GetState(BUTTON_USER)) {
+		if (BSP_PB_GetState(BUTTON_USER)) {
 			debounce = BUTTON_DOWN;
 			pressed = true;
-			BSP_LED_On(LED_RED);
+			BSP_LED_Toggle(LED_GREEN);
 		} else {
 			debounce = BUTTON_UP;
 		}
 		break;
 	case BUTTON_DOWN:
-		if (BSP_PB_GetState(BUTTON_USER)) {
+		if (!BSP_PB_GetState(BUTTON_USER)) {
 			debounce = BUTTON_RAISING;
 		}
 		break;
 	case BUTTON_RAISING:
-		if (BSP_PB_GetState(BUTTON_USER)) {
+		if (!BSP_PB_GetState(BUTTON_USER)) {
 			debounce = BUTTON_UP;
-			pressed = false;
-			BSP_LED_Off(LED_RED);
+			BSP_LED_Toggle(LED_RED);
 		} else {
 			debounce = BUTTON_DOWN;
 		}

@@ -12,11 +12,11 @@
 #include "stm32f4xx_hal.h"  		/* <- HAL include */
 #include "stm32f4xx_nucleo_144.h" 	/* <- BSP include */
 
-void debounceFSM_init();		// debe cargar el estado inicial
-void debounceFSM_update();	// debe leer las entradas, resolver la lógica de
-					// transición de estados y actualizar las salidas
-void buttonPressed();			// debe invertir el estado del LED1
-void buttonReleased();		// debe invertir el estado del LED3
+void debounceFSM_init();
+void debounceFSM_update();
+
+void buttonPressed();
+void buttonReleased();
 
 bool readKey();
 
