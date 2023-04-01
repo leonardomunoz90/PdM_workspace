@@ -36,6 +36,7 @@
 #define FSM_UPDATE_PERIOD 40
 /* Private variables ---------------------------------------------------------*/
 debounceState_t debounce;
+delay_t delayFSM;
 /* UART handler declaration */
 UART_HandleTypeDef UartHandle;
 
@@ -68,19 +69,11 @@ int main(void) {
 	SystemClock_Config();
 
 	/* Internal loop variables*/
-
-	delay_t delayFSM;
-
-
-	delayInit(&delayFSM, FSM_UPDATE_PERIOD);
-
 	debounceFSM_init();
 
 	/* Infinite loop */
 	while (1) {
-		if (delayRead(&delayFSM)) {	//Acciones al cumplir el periodo de interrupción
-			debounceFSM_update();
-		}
+		debounceFSM_update();
 	}
 }
 
@@ -90,46 +83,49 @@ void debounceFSM_init() {
 	BSP_PB_Init(BUTTON_USER, BUTTON_MODE_GPIO);
 	BSP_LED_Init(LED_RED);
 	BSP_LED_Init(LED_GREEN);
+	delayInit(&delayFSM, FSM_UPDATE_PERIOD);
 }
 
 //Implementacion de maquina de estados, se debe checkear periodicamente
 void debounceFSM_update() {
-	switch (debounce) {
-	case BUTTON_UP:
-		if (BSP_PB_GetState(BUTTON_USER)) {
-			debounce = BUTTON_FALLING;
+	if (delayRead(&delayFSM)) {
+		switch (debounce) {
+		case BUTTON_UP:
+			if (BSP_PB_GetState(BUTTON_USER)) {
+				debounce = BUTTON_FALLING;
+			}
+			break;
+		case BUTTON_FALLING:
+			if (BSP_PB_GetState(BUTTON_USER)) {
+				debounce = BUTTON_DOWN;
+				buttonPressed();
+			} else {
+				debounce = BUTTON_UP;
+			}
+			break;
+		case BUTTON_DOWN:
+			if (!BSP_PB_GetState(BUTTON_USER)) {
+				debounce = BUTTON_RAISING;
+			}
+			break;
+		case BUTTON_RAISING:
+			if (!BSP_PB_GetState(BUTTON_USER)) {
+				debounce = BUTTON_UP;
+				buttonReleased();
+			} else {
+				debounce = BUTTON_DOWN;
+			}
+			break;
+		default:
+			break;
 		}
-		break;
-	case BUTTON_FALLING:
-		if (BSP_PB_GetState(BUTTON_USER)) {
-			debounce = BUTTON_DOWN;
-			buttonPressed();
-		} else {
-			debounce = BUTTON_UP;
-		}
-		break;
-	case BUTTON_DOWN:
-		if (!BSP_PB_GetState(BUTTON_USER)) {
-			debounce = BUTTON_RAISING;
-		}
-		break;
-	case BUTTON_RAISING:
-		if (!BSP_PB_GetState(BUTTON_USER)) {
-			debounce = BUTTON_UP;
-			buttonReleased();
-		} else {
-			debounce = BUTTON_DOWN;
-		}
-		break;
-	default:
-		break;
 	}
 }
 
-void buttonPressed(){
+void buttonPressed() {
 	BSP_LED_Toggle(LED_GREEN);
 }
-void buttonReleased(){
+void buttonReleased() {
 	BSP_LED_Toggle(LED_RED);
 }
 

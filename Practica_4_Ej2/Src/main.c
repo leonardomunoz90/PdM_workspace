@@ -37,8 +37,6 @@
 #define LED_PERIOD_1 100
 #define LED_PERIOD_2 500
 
-#define FSM_UPDATE_PERIOD 40
-
 #define LED_TOGGLE LED_BLUE
 /* Private variables ---------------------------------------------------------*/
 /* UART handler declaration */
@@ -74,16 +72,11 @@ int main(void) {
 
 	/* Internal loop variables*/
 	delay_t delayLED;
-	delay_t delayFSM;
 
 	/* Initialize BSP Led for LED ARRAY */
 
 	BSP_LED_Init(LED_TOGGLE);
-
 	delayInit(&delayLED, LED_PERIOD_1);
-	delayInit(&delayFSM, FSM_UPDATE_PERIOD);
-
-
 	debounceFSM_init();
 
 	/* Infinite loop */
@@ -92,16 +85,15 @@ int main(void) {
 			BSP_LED_Toggle(LED_TOGGLE);
 		}
 
-		if (delayRead(&delayFSM)) {	//Acciones al cumplir el periodo de interrupción
-			debounceFSM_update();
-			if (readKey()) {
-				if (delayLED.duration == LED_PERIOD_1) {
-					delayWrite(&delayLED, LED_PERIOD_2);
-				}
+		debounceFSM_update();
 
-				else if (delayLED.duration == LED_PERIOD_2) {
-					delayWrite(&delayLED, LED_PERIOD_1);
-				}
+		if (readKey()) {
+			if (delayLED.duration == LED_PERIOD_1) {
+				delayWrite(&delayLED, LED_PERIOD_2);
+			}
+
+			else if (delayLED.duration == LED_PERIOD_2) {
+				delayWrite(&delayLED, LED_PERIOD_1);
 			}
 		}
 
