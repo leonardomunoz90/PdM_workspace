@@ -18,8 +18,8 @@
 void debounceFSM_init();
 void debounceFSM_update();
 
-bool_t readFalling();
-bool_t readRaising();
+bool_t readFalling();	//funcion para ejecutar en caso de un flanco descendente
+bool_t readRaising();	//funcion para ejecutar en caso de un flanco ascendente
 
 typedef enum{
 BUTTON_UP,

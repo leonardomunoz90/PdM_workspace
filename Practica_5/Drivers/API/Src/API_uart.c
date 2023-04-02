@@ -9,8 +9,11 @@
 #include "API_uart.h"
 
 /* UART handler declaration */
+//Se le coloca static para encapsulamiento
 static UART_HandleTypeDef UartHandle;
 
+
+//Configutaciones de UART del ejemplo 2
 bool_t uartInit() {
 	/*##-1- Configure the UART peripheral ######################################*/
 	/* Put the USART peripheral in the Asynchronous mode (UART Mode) */
@@ -45,6 +48,7 @@ bool_t uartInit() {
 	return true;
 }
 
+//Recorre el array y envía el contenido uno a uno hasta encontrar una \0
 void uartSendString(uint8_t *pstring) {
 	do {
 		HAL_UART_Transmit(&UartHandle, pstring, 1, 0xFFFF);

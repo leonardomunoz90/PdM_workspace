@@ -42,10 +42,10 @@
 
 typedef bool bool_t;
 
-bool_t uartInit();
-void uartSendString(uint8_t *pstring);
-void uartSendStringSize(uint8_t *pstring, uint16_t size);
-void uartReceiveStringSize(uint8_t * pstring, uint16_t size);
+bool_t uartInit();	//Inicialización de UART
+void uartSendString(uint8_t *pstring);	//envía una cadena hasta encontrar \0
+void uartSendStringSize(uint8_t *pstring, uint16_t size); //envía una cadena de longotid size
+void uartReceiveStringSize(uint8_t * pstring, uint16_t size); //recibe una cadena de longitud size y lo guarda en pstring
 
 
 #endif /* API_INC_API_UART_H_ */

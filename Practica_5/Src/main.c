@@ -55,13 +55,16 @@ int main(void) {
 	/* Configure the system clock to 180 MHz */
 	SystemClock_Config();
 
+	//En caso de no inicializar correctamente uart entra en while(1)
 	if (!uartInit()) {
 		while (1) {
 		}
 	}
 
+	//inicialización de MEF
 	debounceFSM_init();
 
+	//Cadenas a transmitir en los flancos
 	uint8_t ascend_msg[] = "\n\rASCENDENTE";
 	uint8_t desc_msg[] = "\n\rDESCENDENTE";
 
@@ -69,7 +72,7 @@ int main(void) {
 	while (1) {
 		debounceFSM_update();
 		if (readFalling()) {
-			//Se prueban las dos funciones de recepción posibles
+			//Se prueban las dos funciones de envío posibles para verificar su funcionamiento
 			uartSendStringSize(desc_msg, sizeof(desc_msg)-1);
 			uartSendString(desc_msg);
 		}

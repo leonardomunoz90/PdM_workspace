@@ -16,7 +16,7 @@ static bool_t falling = false;		//Variable si el boton se soltó
 void debounceFSM_init() {
 	debounce = BUTTON_UP;
 	BSP_PB_Init(BUTTON_USER, BUTTON_MODE_GPIO);
-	delayInit(&delayFSM, FSM_UPDATE_PERIOD);
+	delayInit(&delayFSM, FSM_UPDATE_PERIOD); //inicializa el retardo no bloqueante de verifiacion de la MEF
 }
 
 //Implementacion de maquina de estados, se debe checkear periodicamente
@@ -55,7 +55,7 @@ void debounceFSM_update() {
 	}
 }
 
-//Funcion intermeria para acceder interna pressed
+//Funciones intermedias para acceder variables internas
 bool_t readFalling() {
 	if (falling) {
 		falling = false;
